@@ -19,17 +19,42 @@ function ProductDetail() {
   }, [productId]);
 
   const addToCart = () => {
-    fetch('/api/cart/add', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        productId,
-        quantity
-      }),
+    // Send raw JSON data without the Content-Type header
+    const jsonData = JSON.stringify({
+      productId: productId,
+      quantity: quantity
     });
-    alert(`${book.name} added to cart!`);
+
+    // Create a standard XMLHttpRequest to avoid automatic Content-Type setting
+    const xhr = new XMLHttpRequest();
+    xhr.open('POST', '/api/cart/add', true);
+    
+    // No Content-Type header is set here
+    
+    xhr.onload = function() {
+      if (xhr.status >= 200 && xhr.status < 300) {
+        try {
+          const response = JSON.parse(xhr.responseText);
+          if (response.success) {
+            alert(`${book.name} added to cart!`);
+          } else {
+            alert('Error adding to cart: ' + (response.error || 'Unknown error'));
+          }
+        } catch (e) {
+          alert('Error processing response');
+          console.error('Error parsing response:', e);
+        }
+      } else {
+        alert(`Error: ${xhr.status} - ${xhr.statusText}`);
+      }
+    };
+    
+    xhr.onerror = function() {
+      alert('Network error occurred');
+    };
+    
+    // Send the JSON data as a string
+    xhr.send(jsonData);
   };
 
   if (loading) {
