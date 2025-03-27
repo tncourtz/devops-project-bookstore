@@ -7,13 +7,14 @@ function Home() {
   const [featuredBooks, setFeaturedBooks] = useState([]);
   
   useEffect(() => {
+    // Updated to use relative URLs
     // Fetch categories
-    fetch('/api/categories')
+    fetch(`/api/categories`)
       .then(res => res.json())
       .then(data => setCategories(data));
     
     // Fetch featured books
-    fetch('/api/products/featured')
+    fetch(`/api/products/featured`)
       .then(res => res.json())
       .then(data => setFeaturedBooks(data));
   }, []);

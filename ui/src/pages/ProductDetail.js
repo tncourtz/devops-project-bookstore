@@ -19,42 +19,28 @@ function ProductDetail() {
   }, [productId]);
 
   const addToCart = () => {
-    // Send raw JSON data without the Content-Type header
-    const jsonData = JSON.stringify({
-      productId: productId,
-      quantity: quantity
-    });
-
-    // Create a standard XMLHttpRequest to avoid automatic Content-Type setting
-    const xhr = new XMLHttpRequest();
-    xhr.open('POST', '/api/cart/add', true);
-    
-    // No Content-Type header is set here
-    
-    xhr.onload = function() {
-      if (xhr.status >= 200 && xhr.status < 300) {
-        try {
-          const response = JSON.parse(xhr.responseText);
-          if (response.success) {
-            alert(`${book.name} added to cart!`);
-          } else {
-            alert('Error adding to cart: ' + (response.error || 'Unknown error'));
-          }
-        } catch (e) {
-          alert('Error processing response');
-          console.error('Error parsing response:', e);
-        }
+    fetch('/api/cart/add', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        productId: productId,
+        quantity: quantity
+      })
+    })
+    .then(response => response.json())
+    .then(data => {
+      // Here we're directly using the data returned from the server
+      if (data.success) {
+        alert(`added to cart!`);
       } else {
-        alert(`Error: ${xhr.status} - ${xhr.statusText}`);
+        alert('Error adding to cart: ' + (data.error || 'Unknown error'));
       }
-    };
-    
-    xhr.onerror = function() {
-      alert('Network error occurred');
-    };
-    
-    // Send the JSON data as a string
-    xhr.send(jsonData);
+    })
+    .catch(error => {
+      alert('Error: ' + error.message);
+    });
   };
 
   if (loading) {

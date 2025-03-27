@@ -11,12 +11,11 @@ function ProductList() {
   useEffect(() => {
     setLoading(true);
     
-    // Fetch category info
+    // Updated to use relative URLs
     fetch(`/api/categories/${categoryId}`)
       .then(res => res.json())
       .then(data => setCategory(data));
     
-    // Fetch books for this category
     fetch(`/api/categories/${categoryId}/products`)
       .then(res => res.json())
       .then(data => {

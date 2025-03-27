@@ -8,7 +8,8 @@ function Cart() {
   
   useEffect(() => {
     setLoading(true);
-    fetch('/api/cart')
+    // Updated to use relative URL
+    fetch(`/api/cart`)
       .then(res => res.json())
       .then(data => {
         setCartItems(data);
@@ -19,7 +20,8 @@ function Cart() {
   const updateQuantity = (itemId, newQuantity) => {
     if (newQuantity < 1) return;
     
-    fetch('/api/cart/update', {
+    // Updated to use relative URL
+    fetch(`/api/cart/update`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -36,6 +38,7 @@ function Cart() {
   };
 
   const removeItem = (itemId) => {
+    // Updated to use relative URL
     fetch(`/api/cart/remove/${itemId}`, { method: 'DELETE' })
       .then(() => {
         setCartItems(cartItems.filter(item => item.id !== itemId));
@@ -43,7 +46,8 @@ function Cart() {
   };
 
   const checkout = () => {
-    fetch('/api/cart/checkout', { method: 'POST' })
+    // Updated to use relative URL
+    fetch(`/api/cart/checkout`, { method: 'POST' })
       .then(() => {
         setCartItems([]);
         alert('Thank you for your purchase!');
