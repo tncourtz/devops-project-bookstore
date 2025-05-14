@@ -1,0 +1,22 @@
+﻿apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: bookstore-ui
+  labels:
+    app: bookstore-ui
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: bookstore-ui
+  template:
+    metadata:
+      labels:
+        app: bookstore-ui
+    spec:
+      containers:
+      - name: bookstore-ui
+        image: ghcr.io/tncourtz/bookstore-ui:1.0
+        imagePullPolicy: Never
+        ports:
+        - containerPort: 3000
